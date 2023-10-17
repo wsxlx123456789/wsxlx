@@ -1,0 +1,134 @@
+软件开发中深度学习的应用有很多收获。以下是一些可能的收获：
+
+1. 解决复杂问题：深度学习可以处理各种复杂的问题，例如图像识别、自然语言处理和推荐系统等。通过应用深度学习模型，软件开发人员能够解决那些以前很难或不可能解决的问题。
+
+2. 提高效率和准确性：深度学习模型可以进行大规模的数据处理，并产生高质量的结果。在软件开发中，使用深度学习可以提高算法的准确性和效率，从而提高整个系统的性能。
+
+3. 自动化任务：深度学习可以帮助实现自动化任务。例如，可以使用深度学习模型来自动驾驶汽车、实现智能客服和机器翻译等。这些自动化任务可以提高用户体验，减少人力成本。
+
+4. 新的商业机会：深度学习的应用为软件开发人员带来了新的商业机会。通过开发创新的深度学习应用，可以开拓新的市场，获得竞争优势。
+
+5. 学习新技术和算法：深度学习是一个快速发展的领域，不断涌现出新的技术和算法。通过参与深度学习的开发，软件开发人员可以不断学习和掌握最新的技术，并在实践中应用。
+
+总之，软件开发中深度学习的应用为开发人员带来了许多收获，包括解决复杂问题、提高效率和准确性、自动化任务、商业机会和学习新技术等。
+import numpy as np
+import torch
+import torch.nn as nn
+def forward(x,w1,w2):
+    net1 = nn.Linear(2,2)
+    net1.weight.data = w1
+    net1.bias.data = torch.Tensor([0])
+    h = net1(x)
+    h= torch.sigmoid(h)
+
+    net2 = nn.Linear(2,2)
+    net2.weight.data = w2
+    net2.bias.data = torch.Tensor([0])
+    o = net2.forward(x)
+    o = torch.sigmoid(o)
+    return o
+
+
+if __name__=='__main__':
+    x = torch.tensor([0.5, 0.3])
+    w1 = torch.tensor([[0.2, 0.5], [-0.4, 0.6]])
+    w2 = torch.tensor([[0.1, -0.3], [-0.5, 0.8]])
+    output = forward(x,w1,w2)
+    print('最终的输出值是：',output)
+
+
+
+
+import torch
+import torch.nn as nn
+
+class Net(nn.Module):
+    def __init__(self,input_size,hidden_size,output_size) -> None:
+        super().__init__()
+        self.fc1 = nn.Linear(input_size,hidden_size)
+        self.sigmoid = torch.nn.Sigmoid() #torch.sigmoid
+        self.fc2 = nn.Linear(hidden_size,output_size) #
+
+    def forward(self,x,w1,w2):
+        self.fc1.weight.data = w1
+        self.fc1.bias.data = torch.Tensor([0])
+        h = self.fc1(x)
+        h = self.sigmoid(h)
+
+        self.fc2.weight.data = w2
+        self.fc2.bias.data = torch.Tensor([0])
+        o = self.fc2(h)
+        o = self.sigmoid(o)
+        return o
+
+if __name__=='__main__':
+    x = torch.tensor([0.5, 0.3])
+    w1 = torch.tensor([[0.2, 0.5], [-0.4, 0.6]])
+    w2 = torch.tensor([[0.1, -0.3], [-0.5, 0.8]])
+
+    net = Net(2,2,2)
+    output = net(x,w1,w2)
+    # net.forward(x,w1,w2)
+    print('最终的输出值为：',output)
+
+
+
+import torch
+import torch.nn as nn
+class Net(nn.Module):
+    def __init__(self,input_size,hidden_size,output_size) -> None:
+        super().__init__()
+        self.fc1 = nn.Linear(input_size,hidden_size)
+        self.sigmoid = torch.nn.Sigmoid()
+        self.fc2 = nn.Linear(hidden_size,output_size)
+    def forward(self,x,w1,w2):
+        self.fc1.weight.data = w1
+        self.fc1.bias.data = torch.Tensor([0])
+        out = self.fc1(x)
+        out = self.sigmoid(out)
+
+        self.fc2.weight.data=w2
+        self.fc2.bias.data = torch.Tensor([0])
+        output = self.fc2(out)
+        output=self.sigmoid(output)
+        return output
+
+if __name__=='__main__':
+    x = torch.tensor([0.5, 0.3])
+    y = torch.tensor([0.23, 0.07])
+    w1 = torch.tensor([[0.2, 0.5], [-0.4, 0.6]])
+    w2 = torch.tensor([[0.1, -0.3], [-0.5, 0.8]])
+    net = Net(2,2,2)
+
+    loss = nn.MSELoss()  #定义损失函数
+    optimizer = torch.optim.SGD(params=net.parameters(),lr=1e-2) #定义优化器
+
+    for i in range(1000):
+        output = net(x,w1,w2)
+        loss_fn = loss(output,y)
+        optimizer.zero_grad()
+        loss_fn.backward()
+        optimizer.step()
+        print('损失函数的变化情况',i,loss_fn)
+    print(output)
+
+
+
+
+import torchvision
+from torch.utils.data import DataLoader
+
+train_data = torchvision.datasets.CIFAR10(root='data',transform=torchvision.transforms.ToTensor(),download=True)
+train_loader = DataLoader(train_data,batch_size=64,shuffle=True,drop_last=True)
+
+
+
+                Conv2d(3, 32, 5, padding=2),
+                MaxPool2d(2),
+                Conv2d(32, 32, 5, padding=2),
+                MaxPool2d(2),
+                Conv2d(32, 64, 5, padding=2),
+                MaxPool2d(2),
+                Flatten(),
+                Linear(1024, 64),
+                Linear(64, 10)
